@@ -172,12 +172,19 @@ export class Building {
       this.windowsFor(f, link);
       // balcon filant en façade (les victimes y attendent la grande échelle)
       this.box(W - 1, 0.16, 1.3, mat.slab, 0, f * H + 0.08, D / 2 + 0.75);
-      this.box(W - 1, 0.9, 0.06, mat.frame ??= new THREE.MeshStandardMaterial({ color: '#f2f2ee', roughness: 0.6 }), 0, f * H + 0.6, D / 2 + 1.38);
+      // garde-corps à barreaux : main courante, lisse basse, barreaudage, retours latéraux
+      const rm = mat.rail ??= new THREE.MeshStandardMaterial({ color: '#2e3236', roughness: 0.45, metalness: 0.5 }), by = f * H + 0.16, bz = D / 2 + 1.36;
+      this.box(W - 1, 0.06, 0.08, rm, 0, by + 0.95, bz); this.box(W - 1, 0.04, 0.04, rm, 0, by + 0.1, bz);
+      for (let x = -(W - 1) / 2 + 0.06; x <= (W - 1) / 2; x += 0.14) this.box(0.025, 0.9, 0.025, rm, x, by + 0.5, bz);
+      for (const sx of [-1, 1]) { this.box(0.06, 0.06, 1.3, rm, sx * (W - 1) / 2, by + 0.95, D / 2 + 0.75); for (let z = D / 2 + 0.2; z < bz; z += 0.14) this.box(0.025, 0.9, 0.025, rm, sx * (W - 1) / 2, by + 0.5, z); }
     }
     const top = this.floors * H;
     if (this.upper) {   // toit-terrasse avec acrotère
       this.box(W, 0.3, D, mat.slab, 0, top + 0.15, 0);
       for (const [w, d, x, z] of [[W, 0.2, 0, D / 2], [W, 0.2, 0, -D / 2], [0.2, D, W / 2, 0], [0.2, D, -W / 2, 0]]) this.box(w, 0.8, d, mat.out, x, top + 0.55, z);
+      // couvertine de l'acrotère et corniche saillante sous la terrasse
+      const cm = mat.frame ??= new THREE.MeshStandardMaterial({ color: '#f2f2ee', roughness: 0.6 });
+      for (const [w, d, x, z] of [[W + 0.5, 0.45, 0, D / 2 + 0.03], [W + 0.5, 0.45, 0, -D / 2 - 0.03], [0.45, D - 0.45, W / 2 + 0.03, 0], [0.45, D - 0.45, -W / 2 - 0.03, 0]]) { this.box(w, 0.08, d, cm, x, top + 0.99, z); this.box(w, 0.25, d, cm, x, top - 0.05, z); }
     }
     // plafond de l'étage + toit à deux pans
     this.box(W, 0.2, D, mat.wall, 0, top + 0.1, 0);
@@ -242,25 +249,24 @@ export class Building {
       if (rm.col === 1 && rm.row === 0) continue;          // cage d'escalier
       const zFace = rm.row === 1 ? D / 2 + T / 2 + 0.02 : -D / 2 - T / 2 - 0.02, xs = rm.col === 1 && rm.row === 1 && f === 0 ? [-1.6, 1.6] : [rm.cx];
       const wl = link(rm.id, -1, 'window', false);
-      for (const wx of xs) this.addWindow(rm, wl, wx, y0 + 1.5, zFace, 0);
+      for (const wx of xs) this.addWindow(rm, wl, wx, y0 + 1.5, zFace, 0, xs.length > 1);   // entrée : pas de volets (ils recouvraient la porte)
       if (rm.col !== 1) this.addWindow(rm, wl, rm.col === 0 ? -W / 2 - T / 2 - 0.02 : W / 2 + T / 2 + 0.02, y0 + 1.5, rm.cz, Math.PI / 2);
     }
   }
 
-  addWindow(rm, linkIdx, x, y, z, ry) {
+  addWindow(rm, linkIdx, x, y, z, ry, noShutters = false) {
     const glass = new THREE.MeshStandardMaterial({ color: '#2a3c4d', emissive: '#ff6a10', emissiveIntensity: 0, roughness: 0.15, metalness: 0.3 });
     const m = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 1.2), glass); m.position.set(x, y, z); m.rotation.y = ry;
     if (ry === 0 && z < 0) m.rotation.y = Math.PI; else if (ry !== 0 && x > 0) m.rotation.y = Math.PI / 2; else if (ry !== 0) m.rotation.y = -Math.PI / 2;
     this.root.add(m);
-    const frame = new THREE.Mesh(new THREE.PlaneGeometry(1.45, 1.35), new THREE.MeshStandardMaterial({ color: '#f2f2ee' }));
-    frame.position.copy(m.position); frame.rotation.y = m.rotation.y; frame.translateZ(-0.01); this.root.add(frame);   // cadre, vitre et croisillons espacés de 1 cm : plus de scintillement de loin
-    // croisillons, appui et volets ouverts
+    // cadre en relief (4 montants de 8 cm qui débordent de 10 cm), croisillons, appui et volets ouverts
     const bar = this.mat.frame ??= new THREE.MeshStandardMaterial({ color: '#f2f2ee', roughness: 0.6 });
+    for (const [w, h, fx, fy] of [[1.46, 0.08, 0, 0.64], [1.46, 0.08, 0, -0.64], [0.08, 1.2, -0.69, 0], [0.08, 1.2, 0.69, 0]]) { const c = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.1), bar); c.position.copy(m.position); c.rotation.y = m.rotation.y; c.translateX(fx); c.translateY(fy); c.translateZ(0.03); this.root.add(c); }
     for (const [w, h] of [[0.06, 1.2], [1.3, 0.06]]) { const c = new THREE.Mesh(new THREE.PlaneGeometry(w, h), bar); c.position.copy(m.position); c.rotation.y = m.rotation.y; c.translateZ(0.02); this.root.add(c); }   // le bâti reste quand la vitre éclate
     const sill = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.06, 0.18), bar); sill.position.copy(m.position); sill.rotation.y = m.rotation.y; sill.translateY(-0.66); sill.translateZ(0.06); this.root.add(sill);
-    if (get('textures')) {
+    if (get('textures') && !noShutters) {
       const sh = this.mat.shutter ??= new THREE.MeshStandardMaterial({ color: ['#3f6b4a', '#6b8fa8', '#8a4b3a', '#d8c690'][this.lot.k % 4], roughness: 0.7 });
-      for (const sx of [-1.05, 1.05]) { const v = new THREE.Mesh(new THREE.BoxGeometry(0.62, 1.32, 0.04), sh); v.position.copy(m.position); v.rotation.y = m.rotation.y; v.translateX(sx); v.translateZ(0.02); this.root.add(v); }
+      for (const sx of [-1.07, 1.07]) { const v = new THREE.Mesh(new THREE.BoxGeometry(0.62, 1.32, 0.04), sh); v.position.copy(m.position); v.rotation.y = m.rotation.y; v.translateX(sx); v.translateZ(0.04); this.root.add(v); }
     }
     const flame = new THREE.Sprite(new THREE.SpriteMaterial({ map: flameTexture(), blending: THREE.AdditiveBlending, depthWrite: false, transparent: true })); flame.visible = false; this.root.add(flame);
     const out = m.position.clone().add(new THREE.Vector3(0, 0, 0.35).applyEuler(m.rotation));
