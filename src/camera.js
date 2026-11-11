@@ -31,8 +31,12 @@ export class CameraRig {
     this.follow += wrap(p.heading - this.follow) * (1 - Math.exp(-3 * dt));
     const o = this.orb; o.idle += dt;
     if (!o.drag && o.idle > 3) { const k = Math.exp(-2 * dt); o.yaw *= k; o.pitch *= k; }
-    const far = this.view === 1, d = L * (far ? 1.9 : 0.85) + 7, a = this.follow + o.yaw, cp = Math.cos(o.pitch);
-    this.camera.position.set(p.x - Math.sin(a) * d * cp, (far ? 9 : 4.8) + Math.sin(o.pitch) * d, p.z - Math.cos(a) * d * cp);
+    const far = this.view === 1, a = this.follow + o.yaw, cp = Math.cos(o.pitch);
+    let d = L * (far ? 1.9 : 0.85) + 7;
+    // remise de la caserne entre l'engin et la caméra : la caméra se rapproche au lieu d'entrer dans le mur ou le toit
+    const hy = (far ? 9 : 4.8) + Math.sin(o.pitch) * d, inside = (dd) => (this.blocks || []).some((b) => { const x = p.x - Math.sin(a) * dd * cp, z = p.z - Math.cos(a) * dd * cp; return x > b.minx && x < b.maxx && z > b.minz && z < b.maxz && hy < b.top; });
+    while (d > L * 0.6 && inside(d)) d -= 1;
+    this.camera.position.set(p.x - Math.sin(a) * d * cp, hy, p.z - Math.cos(a) * d * cp);
     this.camera.lookAt(p.x + Math.sin(p.heading) * L * 0.4, 2, p.z + Math.cos(p.heading) * L * 0.4);
     this.camYaw = Math.atan2(p.x - this.camera.position.x, p.z - this.camera.position.z);
   }

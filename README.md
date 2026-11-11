@@ -149,3 +149,12 @@ Scène de test de la sirène (navigateur, non chargée par le jeu) : `test/scene
 - Vue depuis la nacelle (touche C).
 
 Rien n'est en attente pour l'instant.
+
+## Fiche technique
+
+Résumé de ce que fait le code, tenu à jour à chaque modification : le lire suffit pour vérifier une information sans relire tout le jeu.
+
+- **Camions** : FPT = `npc/veh-fire_truck.glb`, VSAV = `npc/veh-ambulance.glb` (`src/truck/Truck.js`). Ne pas les remplacer : Yoann a refusé les .glb ajoutés le 06/11.
+- **Caméras (C, `src/camera.js`)** : Vue poursuite, Vue éloignée, Vue cabine. Cabine (`src/truck/Cockpit.js`) : œil et tableau de bord réglables par camion (`eye`, `panel` dans la fiche du camion ; VSAV : œil (0,5 ; 1,6 ; 2,6), tableau (−0,3 ; 0,55)). Près de la caserne, la caméra poursuite avance vers le camion tant qu'elle serait dans le bâtiment (`City.camBlocks`, `rig.blocks`).
+- **Personnages** : `proportional_low_poly_man__free_download.glb` (équipiers habillés en pompier, victimes).
+- **Sauvegarde** : `pompiers18.save.v1`, graphismes `pompiers18.gfx.v1`.

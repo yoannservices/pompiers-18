@@ -77,7 +77,7 @@ class Game {
     this.fx = new Effects(this.scene);
     this.route = new Route(this.scene);
     this.picker = new Picker(this.scene);
-    this.rig = new CameraRig(this.camera); this.rig.bind(canvas, () => !!this.driving || !!this.ladderOp);
+    this.rig = new CameraRig(this.camera); this.rig.bind(canvas, () => !!this.driving || !!this.ladderOp); this.rig.blocks = this.city.camBlocks;
     bindMouse(canvas);
     canvas.addEventListener('click', () => { if (!this.driving && !this.ladderOp && !this.menu.open) canvas.requestPointerLock?.()?.catch?.(() => {}); });
     this.crew = new Crew(this.scene, this);

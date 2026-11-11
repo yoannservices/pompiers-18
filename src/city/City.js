@@ -296,6 +296,7 @@ export class City {
       const nt = new THREE.CanvasTexture(nc); nt.colorSpace = THREE.SRGBColorSpace;
       const num = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.9), std({ map: nt, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 })); num.position.set(x + o, 0.18 + 7.95, z + 2.03); this.scene.add(num);
     }
+    this.camBlocks = [{ minx: x - 18.7, maxx: x + 18.7, minz: z - 14.5, maxz: z + 2.5, top: 10.6 }];   // volume de la remise : la caméra d'engin n'y entre pas
     this.col.addBox(x - 18.5, x + 18.5, z - 14.5, z - 13.5, 'building');
     this.col.addBox(x - 18.5, x - 17.5, z - 14, z + 2.5, 'building'); this.col.addBox(x + 17.5, x + 18.5, z - 14, z + 2.5, 'building');
     // marquage jaune à chevrons devant chaque baie

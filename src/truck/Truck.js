@@ -33,7 +33,7 @@ export const EPA = {
   model: '../../assets/models/npc/veh-fire_truck.glb', color: '#b3121b', ladder: true, barZ: 1.5,
 };
 export const VSAV = {
-  name: 'VSAV', length: 6.4, width: 2.2, height: 2.8, wheelbase: 3.7, frontOverhang: 1.0, cabH: 2.75,
+  name: 'VSAV', length: 6.4, width: 2.2, height: 2.8, wheelbase: 3.7, frontOverhang: 1.0, cabH: 2.75, eye: [0.5, 1.6, 2.6], panel: [-0.3, 0.55], // œil dans la cabine du vrai modèle (toit à 1,8-2 m), sinon au-dessus de la rampe de gyrophares
   mass: 4500, power: 130, maxSpeed: 31, maxAccel: 2.2, brake: 7.5, turnRadius: 7, rollGain: 0.016,
   model: '../../assets/models/npc/veh-ambulance.glb', color: '#e8e8e8', barZ: 2.0,
 };
