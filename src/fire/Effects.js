@@ -16,7 +16,7 @@ export class Effects {
     // eau
     this.pos = new Float32Array(N * 3); this.vel = new Float32Array(N * 3); this.life = new Float32Array(N); this.next = 0;
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(this.pos, 3));
-    this.water = new THREE.Points(g, new THREE.PointsMaterial({ color: '#d8ecff', size: 0.09, map: tex, transparent: true, opacity: 0.8, depthWrite: false }));
+    this.water = new THREE.Points(g, new THREE.PointsMaterial({ color: '#e4f2ff', size: 0.18, map: tex, transparent: true, opacity: 0.85, depthWrite: false }));
     this.water.frustumCulled = false; scene.add(this.water);
     // braises
     this.epos = new Float32Array(E * 3); this.evel = new Float32Array(E * 3); this.elife = new Float32Array(E); this.enext = 0;

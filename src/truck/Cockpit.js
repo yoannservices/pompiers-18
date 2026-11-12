@@ -10,12 +10,12 @@ export class Cockpit {
     this.root = new THREE.Group(); this.root.visible = false; truck.tilt.add(this.root);
     const dark = new THREE.MeshStandardMaterial({ color: '#1d2126', roughness: 0.8 });
     const dash = new THREE.Mesh(new THREE.BoxGeometry(s.width - 0.3, 0.32, 0.55), dark);
-    dash.position.set(0, this.eye.position.y - 0.66, this.eye.position.z + 1.0); dash.rotation.x = -0.25; this.root.add(dash);
+    dash.position.set(0, this.eye.position.y - 0.86, this.eye.position.z + 1.0); // assez bas pour laisser voir la chaussée, les feux et les voitures devant dash.rotation.x = -0.25; this.root.add(dash);
     // combiné d'instruments
     this.canvas = Object.assign(document.createElement('canvas'), { width: 512, height: 192 });
     this.tex = new THREE.CanvasTexture(this.canvas); this.tex.colorSpace = THREE.SRGBColorSpace;
     const panel = new THREE.Mesh(new THREE.PlaneGeometry(0.46, 0.17), new THREE.MeshBasicMaterial({ map: this.tex, polygonOffset: true, polygonOffsetFactor: -1 }));
-    const po = s.panel || [-0.46, 0.82];   // décalage du combiné sous l'œil (cabine courte du VSAV : plus haut et plus près)
+    const po = s.panel || [-0.62, 0.82];   // décalage du combiné sous l'œil (cabine courte du VSAV : plus haut et plus près)
     panel.position.set(this.eye.position.x, this.eye.position.y + po[0], this.eye.position.z + po[1]); panel.rotation.set(-0.35, Math.PI, 0); this.root.add(panel);
     // volant
     this.wheel = new THREE.Group(); this.wheel.position.set(this.eye.position.x, this.eye.position.y - 0.55, this.eye.position.z + 0.55); this.wheel.rotation.x = -0.45 + Math.PI; this.root.add(this.wheel);

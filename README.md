@@ -156,5 +156,7 @@ Résumé de ce que fait le code, tenu à jour à chaque modification : le lire s
 
 - **Camions** : FPT = `npc/veh-fire_truck.glb`, VSAV = `npc/veh-ambulance.glb` (`src/truck/Truck.js`). Ne pas les remplacer : Yoann a refusé les .glb ajoutés le 06/11.
 - **Caméras (C, `src/camera.js`)** : Vue poursuite, Vue éloignée, Vue cabine. Cabine (`src/truck/Cockpit.js`) : œil et tableau de bord réglables par camion (`eye`, `panel` dans la fiche du camion ; VSAV : œil (0,5 ; 1,6 ; 2,6), tableau (−0,3 ; 0,55)). Près de la caserne, la caméra poursuite avance vers le camion tant qu'elle serait dans le bâtiment (`City.camBlocks`, `rig.blocks`).
+- **Vue cabine, tableau de bord** : planche 0,86 m sous l'œil et 1 m devant, combiné par défaut à (−0,62 ; 0,82) de l'œil : la chaussée, les feux et les voitures restent visibles devant le camion (12/11/2026).
+- **Eau des lances** (`src/fire/Effects.js`) : gouttes en `PointsMaterial` taille 0,18, opacité 0,85. Jets et trafic instancié ont `frustumCulled = false` : `assets/quality.js` ne les coupe plus à distance (avant le 12/11/2026, ils disparaissaient loin de l'origine de la carte).
 - **Personnages** : `proportional_low_poly_man__free_download.glb` (équipiers habillés en pompier, victimes).
 - **Sauvegarde** : `pompiers18.save.v1`, graphismes `pompiers18.gfx.v1`.
