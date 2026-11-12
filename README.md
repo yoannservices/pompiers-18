@@ -1,6 +1,6 @@
 # Pompiers 18
 
-Jeu de sapeur-pompier français, version 3 (en cours). Tu es chef d'agrès au centre de secours.
+Jeu de sapeur-pompier français, version 3. Tu es chef d'agrès au centre de secours.
 1. Quand l'alerte 18 tombe, tu montes dans le FPT et tu pars avec la sirène deux-tons.
 2. Sur place, tu établis une lance depuis l'arrière du camion.
 3. Tu entres dans la maison avec ton ARI et tu éteins le feu pièce par pièce.
